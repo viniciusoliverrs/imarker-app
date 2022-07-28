@@ -3,10 +3,14 @@ import 'package:flutter/material.dart';
 class MapAppBarWidget extends StatelessWidget with PreferredSizeWidget {
   final int markersAmount;
   final double distanceBetweenMarkers;
+  final Function() closePointsOnMap;
+  final Function() clearMap;
   const MapAppBarWidget({
     Key? key,
     required this.markersAmount,
     required this.distanceBetweenMarkers,
+    required this.closePointsOnMap,
+    required this.clearMap,
   }) : super(key: key);
 
   @override
@@ -25,6 +29,14 @@ class MapAppBarWidget extends StatelessWidget with PreferredSizeWidget {
       actions: [
         Row(
           children: [
+            IconButton(
+              icon: const Icon(Icons.refresh_outlined),
+              onPressed: clearMap,
+            ),
+            IconButton(
+              icon: const Icon(Icons.construction),
+              onPressed: closePointsOnMap,
+            ),
             _TextWidget(text: "$markersAmount"),
             const Icon(
               Icons.location_on,
@@ -50,7 +62,7 @@ class _TextWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      "$text",
+      text,
       style: const TextStyle(
         color: Colors.black,
         fontWeight: FontWeight.bold,

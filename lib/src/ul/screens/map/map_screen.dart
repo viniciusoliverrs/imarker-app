@@ -22,11 +22,13 @@ class MapScreen extends StatelessWidget {
             appBar: MapAppBarWidget(
               distanceBetweenMarkers: provider.distanceBetweenMarkers,
               markersAmount: provider.markers.length,
+              closePointsOnMap: provider.closePointsOnMap,
+              clearMap: provider.clearMap,
             ),
-            drawer: MapDrawerBodyWidget(
+            drawer: provider.markers.isNotEmpty? MapDrawerBodyWidget(
               size: size,
               ranges: provider.getRanges(),
-            ),
+            ) : null,
             body: Stack(
               children: [
                 GoogleMap(
@@ -39,9 +41,12 @@ class MapScreen extends StatelessWidget {
                 ),
               ],
             ),
-            floatingActionButton: MapFloatingActionButtonWidget(
-              currentPosition: provider.currentPositionListener,
-            ),
+            floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
+            floatingActionButton: provider.markers.isNotEmpty
+                ? MapFloatingActionButtonWidget(
+                    currentPosition: provider.currentPositionListener,
+                  )
+                : null,
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.centerFloat,
           );

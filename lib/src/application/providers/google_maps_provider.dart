@@ -7,6 +7,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:imarker_app/src/domain/entity/position_entity.dart';
 import 'package:imarker_app/src/domain/entity/range_entity.dart';
 import 'package:latlong2/latlong.dart' as ll;
+import 'package:uuid/uuid.dart';
 
 class GoogleMapsProvider with ChangeNotifier {
   Completer<GoogleMapController> googleMapController = Completer();
@@ -26,7 +27,7 @@ class GoogleMapsProvider with ChangeNotifier {
         await placemarkFromCoordinates(latLng.latitude, latLng.longitude);
 
     if (listPracemark.isNotEmpty) {
-      final String markerId = "${latLng.latitude}-${latLng.longitude}";
+      final String markerId = const Uuid().v4();
       Placemark placemark = listPracemark[0];
       positions.add(PositionEntity(
         id: markerId,
@@ -68,7 +69,7 @@ class GoogleMapsProvider with ChangeNotifier {
           return marker.position;
         }).toList(),
         color: Colors.redAccent,
-        width: 2,
+        width: 1,
         jointType: JointType.mitered,
       ),
     );
@@ -173,5 +174,17 @@ class GoogleMapsProvider with ChangeNotifier {
       ));
     }
     return ranges;
+  }
+
+  void closePointsOnMap() {
+    addMarker(markers.first.position);
+  }
+
+  void clearMap() {
+    markers.clear();
+    polylines.clear();
+    positions.clear();
+    distanceBetweenMarkers = 0;
+    notifyListeners();
   }
 }
